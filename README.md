@@ -57,7 +57,7 @@ socket.onmessage = function(e){action here with e.data}
 
 - Messages of incident and crisis changes will be sent to Group 'User'.
 
-## Contributors
+## References
 
  * [Python 3.5](https://docs.python.org/3/) 
  * [Django 1.10](https://github.com/django/django) Python web framework for backend HTTP request.  [Tutorial](https://docs.djangoproject.com/en/1.10/)
