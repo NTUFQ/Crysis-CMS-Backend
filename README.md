@@ -17,7 +17,7 @@ The system is to help people in Singapore to handle incidents and crises caused 
  $ python3 manage.py runserver
 ```
 - Run online:
-access sublimeapp.site/admin
+access sublimeapp.site:8000/admin
 
 ## API Reference
 
