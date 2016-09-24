@@ -3,7 +3,7 @@ from django.dispatch import receiver
 from .consumers import ws_send_notification
 from .choice import *
 from django.core import serializers
-
+import json
 
 class Incident(models.Model):
     title = models.CharField(max_length=100)
@@ -27,7 +27,9 @@ class Incident(models.Model):
 
 @receiver(models.signals.post_save, sender=Incident)
 def execute_after_save_incident(sender, instance, created, *args, **kwargs):
-    data = serializers.serialize('json', instance).data
+    data = serializers.serialize('json', [instance, ])
+    data = json.loads(data)
+    data = json.dumps(data[0]['fields'])
     if created:
         ws_send_notification('Incident', 'CREATE', data)
     else:
@@ -90,7 +92,9 @@ class Crisis(models.Model):
 
 @receiver(models.signals.post_save, sender=Crisis)
 def execute_after_save_crisis(sender, instance, created, *args, **kwargs):
-    data = serializers.serialize('json', instance).data
+    data = serializers.serialize('json', [instance, ])
+    data = json.loads(data)
+    data = json.dumps(data[0]['fields'])
     if created:
         ws_send_notification('Crisis', 'CREATE', data)
     else:
@@ -144,7 +148,9 @@ class Weather(models.Model):
 
 @receiver(models.signals.post_save, sender=Weather)
 def execute_after_save_crisis(sender, instance, created, *args, **kwargs):
-    data = serializers.serialize('json', instance).data
+    data = serializers.serialize('json', [instance, ])
+    data = json.loads(data)
+    data = json.dumps(data[0]['fields'])
     ws_send_notification('Weather', 'UPDATE', data)
 
 
