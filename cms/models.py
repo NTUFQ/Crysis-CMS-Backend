@@ -79,7 +79,8 @@ class Crisis(models.Model):
     created_by = models.DateTimeField(auto_now_add=True)
     updated_by = models.DateTimeField(auto_now=True)
 
-    incident = models.ManyToManyField(Incident)
+    incident = models.ManyToManyField(Incident, blank=True)
+    shelter = models.ManyToManyField(Shelter, blank=True)
     responseUnit = models.ManyToManyField(ResponseUnit, blank=True)
     trainer = models.ManyToManyField(Trainer, blank=True)
 
@@ -136,6 +137,14 @@ class Shelter(models.Model):
 
     def __str__(self):
         return self.name
+
+
+@receiver(models.signals.post_save, sender=Shelter)
+def execute_after_save_crisis(sender, instance, created, *args, **kwargs):
+    data = serializers.serialize('json', [instance, ])
+    data = json.loads(data)
+    data = json.dumps(data[0]['fields'])
+    ws_send_notification('Shelter', 'UPDATE', data)
 
 
 class Weather(models.Model):
